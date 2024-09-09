@@ -1,0 +1,42 @@
+.app-wrapper {
+  width: 100%;
+  min-height: 100vh;
+  padding: 2rem 0.5rem;
+  background-image: linear-gradient(25deg, #12124e,#572e61,#935074,#d07486);
+  position: relative;
+}
+
+#periodic-elements-table {
+  opacity: 1;
+}
+
+.descripion-style {
+  color: white;
+  text-align: center;
+}
+
+.filter-error {
+  color: white;
+  padding: 2rem 0;
+  text-align: center;
+  font-size: 2rem;
+}
+
+.mat-mdc-form-field {
+  width: 100%;
+}
+
+.mdc-data-table__cell, .mdc-data-table__header-cell {
+  padding: 0 .8rem;
+}
+
+.mat-mdc-row .mat-mdc-cell {
+  border-bottom: 1px solid transparent;
+  border-top: 1px solid transparent;
+  cursor: pointer;
+}
+
+.mat-mdc-row:hover .mat-mdc-cell {
+  border-color: currentColor;
+  transform: scale(1.02);
+}

@@ -1,0 +1,43 @@
+.header-settings {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  align-items: center;
+
+  h3 {
+    color: white;
+  }
+}
+
+.popup-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  width: min(75vw, 400px);
+  background-color: rgba(0, 0, 0, .5);
+  backdrop-filter: blur(4px);
+  transform: translateX(-100vw);
+  z-index: 9999;
+  padding: 1rem 1.5rem;
+}
+
+.error-message {
+  color: red;
+  font-style: italic;
+}
+
+mat-form-field {
+  width: 100%;
+  margin-bottom: 2rem;
+
+  mat-hint {
+    color: white;
+  }
+}
+
+button {
+  background-color: white;
+  color: black;
+}

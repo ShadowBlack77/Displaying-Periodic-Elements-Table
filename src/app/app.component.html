@@ -1,0 +1,64 @@
+<div class="app-wrapper">
+  <div>
+    <h2 class="descripion-style">Welcome in your Periodic Elements Table!</h2>
+    <p class="descripion-style">
+      You can update your Periodic Elements by clicking on them!
+    </p>
+    <p class="descripion-style">
+      Author: ShadowBlack77 - Daniel Miliczek
+    </p>
+  </div>
+  <div>
+    @if (periodicTable.length > 0)
+    {
+      <mat-form-field>
+        <mat-label>Filter</mat-label>
+        <input matInput placeholder="Ex. Neon" [(ngModel)]="periodicElementFliterValue" (keyup)="filterPeriodicTable()" />
+      </mat-form-field>
+      
+      @if (!isSearching) {
+        <table mat-table [dataSource]="tableContent" class="mat-elevation-z8" id="periodic-elements-table">
+
+          <ng-container matColumnDef="position">
+            <th mat-header-cell *matHeaderCellDef> No. </th>
+            <td mat-cell *matCellDef="let element"> {{ formatColumnText(element.position) }} </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef> Name </th>
+            <td mat-cell *matCellDef="let element"> {{ formatColumnText(element.name) }} </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="weight">
+            <th mat-header-cell *matHeaderCellDef> Weight </th>
+            <td mat-cell *matCellDef="let element"> {{ formatColumnText(element.weight) }} </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="symbol">
+            <th mat-header-cell *matHeaderCellDef> Symbol </th>
+            <td mat-cell *matCellDef="let element"> {{ formatSymbolColumnText(element.symbol) }} </td>
+          </ng-container>
+  
+          <tr mat-header-row *matHeaderRowDef="tableColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: tableColumns;" (click)="openSettingsWindow(row.position)"></tr>
+  
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">
+              <p class="filter-error" style="line-height: 50px;">No data matching the filter "<span>{{ filterErrorTextFormating(periodicElementFliterValue) }}</span>"</p>
+            </td>
+          </tr>
+        </table>
+      } @else {
+        <div style="width: 100%; height: 60vh; display: flex; justify-content: center; align-items: center;">
+          <mat-spinner></mat-spinner>
+        </div>
+      }
+    } @else {
+      <div style="width: 100%; height: 60vh; display: flex; justify-content: center; align-items: center;">
+        <mat-spinner></mat-spinner>
+      </div>
+    }
+  </div>
+
+  <app-popup (save)="onSave($event)" />
+</div>

@@ -1,0 +1,50 @@
+<div class="popup-wrapper" id="popup-settings">
+  <div class="header-settings">
+    <div>
+      <h3>Settings</h3>
+    </div>
+    <div>
+      <button mat-fab (click)="handleCloseClickButton()" style="width: 24px; height: 24px;">
+        <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="close"></mat-icon>
+      </button>
+    </div>
+  </div>
+  <div>
+    <div>
+      @if(periodicNameElementError) {
+        <p class="error-message">{{ periodicNameElementError }}</p>
+      }
+      <mat-form-field appearance="fill">
+        <mat-label>Name</mat-label>
+        <input matInput placeholder="Name of periodic element" [(ngModel)]="periodicNameElement" />
+        <mat-hint>Name field cannot be empty!</mat-hint>
+      </mat-form-field>
+    </div>
+    <div>
+      @if(periodicWeightElementError) {
+        <p class="error-message">{{ periodicWeightElementError }}</p>
+      }
+      <mat-form-field appearance="fill">
+        <mat-label>Weight</mat-label>
+        <input matInput placeholder="Name of periodic element" [(ngModel)]="periodicWeightElement" />
+        <mat-hint>Weight field cannot be empty!</mat-hint>
+      </mat-form-field>
+    </div>
+    <div>
+      @if(periodicSymbolElementEror) {
+        <p class="error-message">{{ periodicSymbolElementEror }}</p>
+      }
+      <mat-form-field appearance="fill">
+        <mat-label>Symbol</mat-label>
+        <input matInput placeholder="Name of periodic element" [(ngModel)]="periodicSymbolElement" />
+        <mat-hint>Symbol field cannot be empty!</mat-hint>
+      </mat-form-field>
+    </div>
+    <div>
+      <button mat-fab extended (click)="saveSettings()">
+        <mat-icon>save</mat-icon>
+        Save
+      </button>
+    </div>
+  </div>
+</div>
