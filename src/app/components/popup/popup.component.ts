@@ -55,9 +55,9 @@ export class PopupComponent {
 
     if (
       this.periodicPostionElement > 0 &&
-      this.periodicNameElement !== '' &&
+      this.periodicNameElement.trim() !== '' &&
       this.periodicWeightElement > 0 &&
-      this.periodicSymbolElement !== ''
+      this.periodicSymbolElement.trim() !== ''
     ) {
       const updatedElement: PeriodicElement = {
         position: this.periodicPostionElement,
@@ -69,7 +69,7 @@ export class PopupComponent {
       this.save.emit(updatedElement);
       this.handleCloseClickButton();
     } else {
-      if (this.periodicNameElement === '') {
+      if (this.periodicNameElement.trim() === '') {
         this.periodicNameElementError = 'Name field cannot be empty!';
       }
 
@@ -77,7 +77,7 @@ export class PopupComponent {
         this.periodicWeightElementError = 'Must be higher then 0!';
       }
 
-      if (this.periodicSymbolElement === '') {
+      if (this.periodicSymbolElement.trim() === '') {
         this.periodicSymbolElementEror = 'Symbol field cannot be empty!';
       }
     }
