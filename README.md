@@ -4,6 +4,11 @@
   </div>
   <div>
     <div>
+      <p>
+        Live Preview: <a href="https://shadowblack77-periodic-elements-table.netlify.app/" target="_blank">Click Me!</a>
+      </p>
+    </div>
+    <div>
       <div>
         <h3>Technologies used</h3>
       </div>
