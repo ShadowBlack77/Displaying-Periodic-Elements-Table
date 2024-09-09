@@ -42,7 +42,7 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.periodicService.getAllPeriodicElements()
       .pipe(
-        delay(2000)
+        delay(500)
       )
       .subscribe({
         next: (result) => {
