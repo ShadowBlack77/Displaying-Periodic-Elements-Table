@@ -9,15 +9,15 @@
     </p>
   </div>
   <div>
-    @if (periodicTable.length > 0)
+    @if (!state.get().isLoading)
     {
       <mat-form-field>
         <mat-label>Filter</mat-label>
-        <input matInput placeholder="Ex. Neon" [(ngModel)]="periodicElementFliterValue" (keyup)="filterPeriodicTable()" />
+        <input matInput placeholder="Ex. Neon" [(ngModel)]="state.get().periodicElementFilterValue" (keyup)="filterPeriodicTable()" />
       </mat-form-field>
       
-      @if (!isSearching) {
-        <table mat-table [dataSource]="tableContent" class="mat-elevation-z8" id="periodic-elements-table">
+      @if (!state.get().isSearching) {
+        <table mat-table [dataSource]="state.get().tableContent" class="mat-elevation-z8" id="periodic-elements-table">
 
           <ng-container matColumnDef="position">
             <th mat-header-cell *matHeaderCellDef> No. </th>
@@ -44,7 +44,7 @@
   
           <tr class="mat-row" *matNoDataRow>
             <td class="mat-cell" colspan="4">
-              <p class="filter-error" style="line-height: 50px;">No data matching the filter "<span>{{ filterErrorTextFormating(periodicElementFliterValue) }}</span>"</p>
+              <p class="filter-error" style="line-height: 50px;">No data matching the filter "<span>{{ filterErrorTextFormating(state.get().periodicElementFilterValue) }}</span>"</p>
             </td>
           </tr>
         </table>

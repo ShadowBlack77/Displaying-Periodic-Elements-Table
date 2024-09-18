@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { gsap } from 'gsap';
-import PeriodicElement from '../../interfaces/PeriodicElement.interface';
+import PeriodicElement from '../../models/PeriodicElement.model';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormField } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';

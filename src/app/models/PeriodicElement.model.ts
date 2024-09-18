@@ -1,4 +1,4 @@
-export default interface PeriodicElement {
+export default interface PeriodicElementModel {
   position: number;
   name: string;
   weight: number;

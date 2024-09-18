@@ -1,15 +1,17 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import PeriodicElement from './interfaces/PeriodicElement.interface';
+import PeriodicElementModel from './models/PeriodicElement.model';
 import { PeriodicElementsService } from './services/periodic-elements.service';
-import { delay } from 'rxjs';
+import { delay, tap } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { PopupComponent } from './components/popup/popup.component';
 import { gsap } from 'gsap';
+import { rxState } from '@rx-angular/state';
+import { PeriodicAppModel } from './models/PeriodicApp.model';
 
 @Component({
   selector: 'app-root',
@@ -26,51 +28,53 @@ import { gsap } from 'gsap';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent implements OnInit {
-  public periodicTable: PeriodicElement[] = [];
+export class AppComponent {
+
+  private readonly periodicElementService = inject(PeriodicElementsService);
+
   public tableColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  public tableContent!: MatTableDataSource<PeriodicElement>;
-  public periodicElementFliterValue: string = '';
-  public isSearching: boolean = false;
-  public selectedPeriodicElement: PeriodicElement | null = null;
-  private typingWaiter!: ReturnType<typeof setTimeout>;
+
+  public state = rxState<PeriodicAppModel>(({ set, connect }) => {
+    set({
+      tableContent: new MatTableDataSource<PeriodicElementModel>(),
+      periodicElement: [],
+      isLoading: true,
+      isSearching: false,
+      periodicElementFilterValue: '',
+    });
+
+    connect('periodicElement', this.periodicElementService.getAll().pipe(
+      delay(500),
+      tap((data) => {
+        this.state.set({ tableContent: new MatTableDataSource(data) });
+        this.state.set({ isLoading: false });
+      })
+    ));
+  }); 
 
   @ViewChild(PopupComponent) popupComponent!: PopupComponent;
 
-  constructor(private periodicService: PeriodicElementsService) {}
-  
-  ngOnInit(): void {
-    this.periodicService.getAllPeriodicElements()
-      .pipe(
-        delay(500)
-      )
-      .subscribe({
-        next: (result) => {
-          this.periodicTable = result;
-
-          this.tableContent = new MatTableDataSource(this.periodicTable);
-        },
-        error: (err) => {
-          console.error(err);
-        }
-      });
-  }
+  public selectedPeriodicElement: PeriodicElementModel | null = null;
 
   public filterPeriodicTable(): void {
-    if (this.typingWaiter) {
-      clearTimeout(this.typingWaiter);
+    this.state.set({ isSearching: true });
+
+    const currentTypingWaiter = this.state.get('typingWaiter');
+    if (currentTypingWaiter) {
+      clearTimeout(currentTypingWaiter);
     }
 
-    this.typingWaiter = setTimeout(() => {
-      this.tableContent.filter = this.periodicElementFliterValue.trim().toLowerCase();
-      this.isSearching = false;
+    const typingWaiter = setTimeout(() => {
+      const filterValue = this.state.get('periodicElementFilterValue').trim().toLowerCase();
+      this.state.get('tableContent').filter = filterValue;
+      this.state.set({ isSearching: false });
     }, 2000);
-  
-    this.isSearching = true;
+
+    this.state.set({ typingWaiter });
   }
 
   public openSettingsWindow(perdiodicId: number): void {
-    const findPeriodicElement = this.periodicTable.find(e => e.position === perdiodicId);
+    const findPeriodicElement = this.state.get().periodicElement.find(e => e.position === perdiodicId);
 
     if (findPeriodicElement) {
       this.selectedPeriodicElement = findPeriodicElement;
@@ -97,13 +101,13 @@ export class AppComponent implements OnInit {
     return text.length > 9 ? `${text.slice(0, 3)}...` : text;
   }
 
-  public onSave(updatedElement: PeriodicElement): void {
+  public onSave(updatedElement: PeriodicElementModel): void {
     if (updatedElement.position > 0) {
-      const index = this.periodicTable.findIndex(e => e.position === updatedElement.position);
+      const index = this.state.get().periodicElement.findIndex(e => e.position === updatedElement.position);
 
       if (index !== -1) {
-        this.periodicTable[index] = updatedElement;
-        this.tableContent.data = [...this.periodicTable];
+        this.state.get().periodicElement[index] = updatedElement;
+        this.state.get().tableContent.data = [...this.state.get().periodicElement];
       }
     } 
   }
